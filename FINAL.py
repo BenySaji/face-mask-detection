@@ -2,11 +2,12 @@ from sanitizer import drop_solution
 from temperature import scan_temp_and_display
 from mask_detector import load_configs, find_mask
 
-from sanitizer import cleaup as s_cleanup
-from temperature import cleaup as t_cleanup
-from mask_detector import cleaup as ai_cleanup
+from sanitizer import cleanup as s_cleanup
+from temperature import cleanup as t_cleanup
+from mask_detector import cleanup as ai_cleanup
 import argparse
-
+import os
+import cv2
 
 # command line arguments
 ap = argparse.ArgumentParser()
