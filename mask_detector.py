@@ -139,10 +139,8 @@ def find_mask(confidence=0.5,draw=True):
 
 
         if draw:
-            cv2.putText(frame, label, (startX-50, startY - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
-		    cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
-
+            cv2.putText(frame, label, (startX-50, startY - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
+            cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
     return yes_mask, no_mask, frame
 
 
