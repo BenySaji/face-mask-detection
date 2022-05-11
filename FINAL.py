@@ -1,9 +1,9 @@
 from sanitizer import drop_solution
-from tempature import scan_temp_and_display
+from temperature import scan_temp_and_display
 from mask_detector import load_configs, find_mask
 
 from sanitizer import cleaup as s_cleanup
-from tempature import cleaup as t_cleanup
+from temperature import cleaup as t_cleanup
 from mask_detector import cleaup as ai_cleanup
 import argparse
 
