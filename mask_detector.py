@@ -63,50 +63,48 @@ def detect_and_predict_mask(frame, min_confi=0.5):
         raise ValueError('maskNet is not loaded')
 
 	# grab the dimensions of the frame and then construct a blob from it
-	(h, w) = frame.shape[:2]
-	blob = cv2.dnn.blobFromImage(frame, 1.0, (300, 300),(104.0, 177.0, 123.0))
+    (h, w) = frame.shape[:2]
+    blob = cv2.dnn.blobFromImage(frame, 1.0, (300, 300),(104.0, 177.0, 123.0))
 
-	# pass the blob through the network and obtain the face detections
-	faceNet.setInput(blob)
-	detections = faceNet.forward()
+    # pass the blob through the network and obtain the face detections
+    faceNet.setInput(blob)
+    detections = faceNet.forward()
 
-	# initialize list of faces, locations
-	faces,locs,preds = list(),list(),list()
+    # initialize list of faces, locations
+    faces,locs,preds = list(),list(),list()
 
-
-	for i in range(0, detections.shape[2]):
-
+    for i in range(0, detections.shape[2]):
         # filter out weak detections
-		confidence = detections[0, 0, i, 2]
+        confidence = detections[0, 0, i, 2]
         if confidence < min_confi:
             continue
 
-		# compute the (x, y)-coordinates of the bounding box for the object
-		box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-		(startX, startY, endX, endY) = box.astype("int")
+        # compute the (x, y)-coordinates of the bounding box for the object
+        box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+        (startX, startY, endX, endY) = box.astype("int")
 
-		# ensure the bounding boxes fall within the dimensions of the frame
-		(startX, startY) = (max(0, startX), max(0, startY))
-		(endX, endY) = (min(w - 1, endX), min(h - 1, endY))
+        # ensure the bounding boxes fall within the dimensions of the frame
+        (startX, startY) = (max(0, startX), max(0, startY))
+        (endX, endY) = (min(w - 1, endX), min(h - 1, endY))
 
-		# extract the face ROI, convert it from BGR to RGB channel ordering,
+        # extract the face ROI, convert it from BGR to RGB channel ordering,
         # resize it to 224x224, and preprocess it
-		face = frame[startY:endY, startX:endX]
-		face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)
-		face = cv2.resize(face, (224, 224))
-		face = img_to_array(face)
-		face = preprocess_input(face)
+        face = frame[startY:endY, startX:endX]
+        face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)
+        face = cv2.resize(face, (224, 224))
+        face = img_to_array(face)
+        face = preprocess_input(face)
 
-		# update list
+        # update list
         faces.append(face)
-		locs.append((startX, startY, endX, endY))
+        locs.append((startX, startY, endX, endY))
 
-	# only make a predictions if at least one face was detected
-	if len(faces) > 0:
-		faces = np.array(faces, dtype="float32")
-		preds = maskNet.predict(faces, batch_size=32)
+    # only make a predictions if at least one face was detected
+    if len(faces) > 0:
+        faces = np.array(faces, dtype="float32")
+        preds = maskNet.predict(faces, batch_size=32)
 
-	return (locs, preds)
+    return (locs, preds)
 
 def find_mask(confidence=0.5,draw=True):
     """
@@ -175,7 +173,7 @@ if __name__ == '__main__':
             yes_mask, no_mask, frame = find_mask(args['confidence'],True)
 
             # show the output frame
-        	cv2.imshow("Face Mask Detector", frame)
+            cv2.imshow("Face Mask Detector", frame)
 
             total_faces = yes_mask + no_mask
             print(f"found {total_faces} faces with {yes_mask} mask")
