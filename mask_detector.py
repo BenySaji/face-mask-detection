@@ -132,10 +132,12 @@ def find_mask(confidence=0.5,draw=True):
 
         if mask > withoutMask:
             yes_mask += 1
-            olor = (0, 255, 0)
+            color = (0, 255, 0)
+            label = "yes mask"
         else:
             no_mask += 1
             color = (0, 0, 255)
+            label = "no mask"
 
 
         if draw:
